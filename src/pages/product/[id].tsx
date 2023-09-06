@@ -1,12 +1,12 @@
+import { CartContext } from "@/context/CartContext";
 import { stripe } from "@/lib/stripe";
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product";
-import axios from "axios";
 import { GetStaticPaths } from "next";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { use, useContext, useState } from "react";
 import Stripe from "stripe";
 
 interface ProductProps {
@@ -22,30 +22,12 @@ interface ProductProps {
 
 export default function Product({ product }: ProductProps) {
   const { isFallback } = useRouter()
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+  const { addCartItem } = useContext(CartContext)
 
   if (isFallback) {
     return <p>loading...</p>
   }
-
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true)
-
-      const response = await axios.post('/api/checkout' ,{
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data
-
-      window.location.href = checkoutUrl
-    } catch (err) {
-      //Conectar a uma ferramenta de OBSERVABILIDADE (DATALOG / SENTRY)
-      setIsCreatingCheckoutSession(false)
-      alert('Falha ao redirecionar ao checkout!')
-    }
-  }
-
+  //desabilitar botão de adicionar item ao carrinho quando já existir no carrinho.
   return (
     <>
       <Head>
@@ -62,9 +44,9 @@ export default function Product({ product }: ProductProps) {
           <span>{product.price}</span>
 
           <p>{product.description}</p>
-
-          <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
-            Comprar agora
+          
+          <button onClick={() => addCartItem(product)}>
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>

@@ -42,16 +42,23 @@ export const Product = styled('div', {
     opacity: 0,
     transition: 'all 0.2s ease-in-out',
 
-    strong: {
-      fontSize: '$lg',
-      color: '$gray100',
-    },
+    div: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      gap: '0.25rem',
 
-    span: {
-      fontSize: '$xl',
-      fontWeight: 'bold',
-      color: '$green300',
-    }
+      strong: {
+        fontSize: '$lg',
+        color: '$gray100',
+      },
+  
+      span: {
+        fontSize: '$xl',
+        fontWeight: 'bold',
+        color: '$green300',
+      }
+    },
   },
 
   '&:hover': {
@@ -59,5 +66,24 @@ export const Product = styled('div', {
       transform: 'translateY(0%)',
       opacity: 1,
     }
+  }
+})
+
+export const ButtonAdd = styled('button', {
+  fontSize: '$2xl',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '0.75rem',
+  borderRadius: 6,
+  border: 'none',
+  cursor: 'pointer',
+
+  color: '$white',
+  backgroundColor: '$green500',
+  transition: 'all 0.2s ease-in-out',
+
+  '&:hover': {
+    backgroundColor: '$green300',
   }
 })
