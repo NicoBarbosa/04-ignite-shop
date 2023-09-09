@@ -6,6 +6,11 @@ export const globalStyle = globalCss({
     padding: 0,
   },
 
+  ':focus': {
+    outline: 0,
+    boxShadow: '0 0 0 2px #00b373'
+  },
+
   body: {
     '-webkit-font-smoothing': 'antialiased',
     backgroundColor: '$gray900',

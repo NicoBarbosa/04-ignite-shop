@@ -22,9 +22,80 @@ export const Content = styled(Dialog.Content, {
   color: '$gray100',
 })
 
+export const ContentContainer = styled('section', {
+  width: '100%',
+  height: '100%',
+  overflow: 'scroll',
+})
+
 export const Title = styled(Dialog.Title, {
   fontSize: '$lg',
   fontWeight: 'bold',
+  marginBottom: '0.5rem',
+})
+
+export const CardItem = styled('div', {
+  marginTop: '1.5rem',
+  display: 'flex',
+  gap: '1.47375rem',
+
+  '&:last-child': {
+    marginBottom: '1rem',
+  }
+})
+
+export const ImageContainer = styled('div', {
+  background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
+  width: '100%',
+  maxWidth: '5.925rem',
+  height: '5.925rem',
+  borderRadius: 8,
+
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  img: {
+    objectFit: 'cover',
+  }
+})
+
+export const DetailsContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+
+  h2: {
+    fontSize: '$md',
+    color: '$gray300',
+    lineHeight: 1.6,
+  },
+
+  strong: {
+    marginTop: '0.125rem',
+    fontSize: '$md',
+    color: '$gray100',
+  },
+
+  button: {
+    marginTop: '0.5rem',
+    color: '$green500',
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    transition: 'color 0.2s ease-in-out',
+    border: 0,
+    backgroundColor: 'transparent',
+    width: 'fit-content',
+    
+    '&:focus': {
+      boxShadow: 'none',
+    },
+
+    '&:hover': {
+      color: '$green300',
+    }
+  }
 })
 
 export const CloseButton = styled(Dialog.Close, {
@@ -37,6 +108,7 @@ export const CloseButton = styled(Dialog.Close, {
   cursor: 'pointer',
   color: '$grayIcon',
   transition: 'all 0.2s ease-in-out',
+  borderRadius: 4,
 
   display: 'flex',
 

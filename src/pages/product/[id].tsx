@@ -17,17 +17,22 @@ interface ProductProps {
     price: string,
     description: string,
     defaultPriceId: string,
+    priceAsNumber: number
   }
 }
 
 export default function Product({ product }: ProductProps) {
   const { isFallback } = useRouter()
-  const { addCartItem } = useContext(CartContext)
+  const { addCartItem, cart } = useContext(CartContext)
 
   if (isFallback) {
     return <p>loading...</p>
   }
-  //desabilitar botão de adicionar item ao carrinho quando já existir no carrinho.
+
+  const productIndex = cart.findIndex((item) => item.id === product.id)
+
+  const productAlredyInCart = productIndex >= 0 ? true : false
+  
   return (
     <>
       <Head>
@@ -45,7 +50,7 @@ export default function Product({ product }: ProductProps) {
 
           <p>{product.description}</p>
           
-          <button onClick={() => addCartItem(product)}>
+          <button disabled={productAlredyInCart} onClick={() => addCartItem(product)}>
             Colocar na sacola
           </button>
         </ProductDetails>
@@ -84,6 +89,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({param
         }).format(price.unit_amount as number / 100),
         description: product.description,
         defaultPriceId: price.id,
+        priceAsNumber: price.unit_amount,
       }
     },
     revalidate: 60 * 60 * 1, //1 hora

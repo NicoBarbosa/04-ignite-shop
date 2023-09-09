@@ -6,11 +6,13 @@ export interface CartProps {
   imageUrl: string
   price: string
   defaultPriceId: string
+  priceAsNumber?: number
 }
 
 interface CartContextProps {
   cart: CartProps[]
   addCartItem: (produtct: CartProps) => void
+  removeCartItem: (id: string) => void
 }
 
 interface CartProviderType {
@@ -30,8 +32,17 @@ export function CartProvider({ children }: CartProviderType) {
     setCart((state) => [...state, product])
   }
 
+  function removeCartItem(id: string) {
+    const copyCart = [...cart]
+
+    const updatedCart = copyCart.filter((item) => item.id !== id)
+
+    setCart(updatedCart)
+  }
+  
+
   return (
-    <CartContext.Provider value={{cart, addCartItem}}>
+    <CartContext.Provider value={{cart, addCartItem, removeCartItem}}>
       {children}
     </CartContext.Provider>
   )

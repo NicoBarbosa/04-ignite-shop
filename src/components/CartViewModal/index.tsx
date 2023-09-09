@@ -1,12 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { CloseButton, Content, Title, Footer, EmptyItems } from './modal'
+import { CloseButton, Content, Title, Footer, EmptyItems, CardItem, ImageContainer, DetailsContainer, ContentContainer } from './modal'
 import { FinnTheHuman, X } from '@phosphor-icons/react'
 import { CartContext } from '@/context/CartContext'
 import { useContext, useState } from 'react'
 import axios from 'axios'
+import Image from 'next/image'
 
 export function CartViewModal() {
-  const { cart } = useContext(CartContext)
+  const { cart, removeCartItem } = useContext(CartContext)
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
 
   async function handleBuyProduct() {
@@ -21,13 +22,23 @@ export function CartViewModal() {
 
       console.log(checkoutUrl)
 
-      // window.location.href = checkoutUrl
+      window.location.href = checkoutUrl
     } catch (err) {
       //Conectar a uma ferramenta de OBSERVABILIDADE (DATALOG / SENTRY)
       setIsCreatingCheckoutSession(false)
       alert('Falha ao redirecionar ao checkout!')
     }
   }
+
+  const total = cart.reduce((total, currentValue) => {
+    return total + currentValue.priceAsNumber / 100
+  }, 0)
+
+  const totalShop = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(total)
+
   return (
     <Dialog.Portal>
       <Content >
@@ -35,13 +46,30 @@ export function CartViewModal() {
         <CloseButton>
           <X weight='bold' />
         </CloseButton>
-
-        {cart.length >= 1 ? '' : (
-        <EmptyItems>
-          <FinnTheHuman size={32} />
-          <span>Sem nenhuma camiseta na sua sacola!</span>
-        </EmptyItems>
-        )}        
+        
+        <ContentContainer>
+          {cart.length >= 1 ? (
+            cart.map((item) => {
+              return (
+                <CardItem key={item.id}>
+                  <ImageContainer>
+                    <Image src={item.imageUrl} width={94.8} height={94.8} alt=''/>
+                  </ImageContainer>
+                  <DetailsContainer>
+                    <h2>{item.name}</h2>
+                    <strong>{item.price}</strong>
+                    <button onClick={() => removeCartItem(item.id)}>Remover</button>
+                  </DetailsContainer>
+                </CardItem>
+              )
+            })
+          ) : (
+          <EmptyItems>
+            <FinnTheHuman size={32} />
+            <span>Sem nenhuma camiseta na sua sacola!</span>
+          </EmptyItems>
+          )}
+        </ContentContainer>     
 
         <Footer>
           <section>
@@ -50,8 +78,8 @@ export function CartViewModal() {
               <strong>Valor total</strong>
             </div>
             <div>
-              <span>3 itens</span>
-              <strong>R$ 270,00</strong>
+              <span>{cart.length} itens</span>
+              <strong>{totalShop}</strong>
             </div>
           </section>
           <button onClick={handleBuyProduct} disabled={isCreatingCheckoutSession}>

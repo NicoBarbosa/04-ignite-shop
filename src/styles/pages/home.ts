@@ -83,7 +83,12 @@ export const ButtonAdd = styled('button', {
   backgroundColor: '$green500',
   transition: 'all 0.2s ease-in-out',
 
-  '&:hover': {
+  '&:disabled': {
+    opacity: 0.9,
+    cursor: 'not-allowed',
+  },
+
+  '&:not(:disabled):hover': {
     backgroundColor: '$green300',
   }
 })
